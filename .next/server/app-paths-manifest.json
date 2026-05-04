@@ -1,3 +1,11 @@
 {
-  "/(public)/page": "app/(public)/page.js"
+  "/api/products/route": "app/api/products/route.js",
+  "/api/categories/route": "app/api/categories/route.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/admin/products/page": "app/admin/products/page.js",
+  "/admin/categories/page": "app/admin/categories/page.js",
+  "/admin/admins/page": "app/admin/admins/page.js",
+  "/(public)/page": "app/(public)/page.js",
+  "/admin/products/new/page": "app/admin/products/new/page.js",
+  "/(public)/product/[id]/page": "app/(public)/product/[id]/page.js"
 }
