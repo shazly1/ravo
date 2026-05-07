@@ -1,3 +1,4 @@
+export const revalidate = 0;
 import { connectDB } from '@/lib/db';
 import Category from '@/models/Category';
 import Link from 'next/link';
