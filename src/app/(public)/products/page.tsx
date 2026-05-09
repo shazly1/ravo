@@ -17,40 +17,40 @@ export default function ProductsPage() {
     fetch('/api/categories').then(r => r.json()).then(d => setCategories(d.categories || []));
   }, []);
 
-  const fetchProducts = useCallback(async () => {
-    setLoading(true);
-    const params = new URLSearchParams({ page: String(page), limit: '12' });
-    if (selectedCategory !== 'all') params.set('category', selectedCategory);
-    if (search) params.set('search', search);
-    const res = await fetch(`/api/products?${params}`);
-    const data = await res.json();
-    setProducts(data.products || []);
-    setPagination(data.pagination);
-    setLoading(false);
-  }, [page, selectedCategory, search]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      const params = new URLSearchParams({ page: String(page), limit: '99999' });
+      if (selectedCategory !== 'all') params.set('category', selectedCategory);
+      if (search) params.set('search', search);
+      const res = await fetch(`/api/products?${params}`);
+      const data = await res.json();
+      setProducts(data.products || []);
+      setPagination(data.pagination);
+      setLoading(false);
+    };
 
-  useEffect(() => { fetchProducts(); }, [fetchProducts]);
+    fetchProducts();
+  }, [page, selectedCategory, search]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setSearch(searchInput);
     setPage(1);
+    setSearch(searchInput);
   };
 
   const handleCategoryChange = (cat: string) => {
-    setSelectedCategory(cat);
     setPage(1);
+    setSelectedCategory(cat);
   };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      {/* Header */}
       <div className="mb-8">
         <h1 className="font-display text-3xl md:text-4xl font-bold text-white mb-2">All Products</h1>
         <p className="text-gray-400">Find the best deals from top stores</p>
       </div>
 
-      {/* Search */}
       <form onSubmit={handleSearch} className="flex gap-3 mb-8">
         <input
           type="text"
@@ -67,14 +67,12 @@ export default function ProductsPage() {
         </button>
       </form>
 
-      {/* Category Filter */}
       <CategoryFilterBar
         categories={categories}
         selected={selectedCategory}
         onChange={handleCategoryChange}
       />
 
-      {/* Products Grid */}
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
           {[...Array(8)].map((_, i) => (
@@ -99,29 +97,6 @@ export default function ProductsPage() {
           {products.map((product: any) => (
             <ProductCard key={product._id} product={product} />
           ))}
-        </div>
-      )}
-
-      {/* Pagination */}
-      {pagination && pagination.pages > 1 && (
-        <div className="flex justify-center gap-2 mt-12">
-          <button
-            onClick={() => setPage(p => Math.max(1, p - 1))}
-            disabled={page === 1}
-            className="btn-secondary px-4 py-2 disabled:opacity-40"
-          >
-            ← Prev
-          </button>
-          <span className="flex items-center px-4 text-gray-400">
-            Page {page} of {pagination.pages}
-          </span>
-          <button
-            onClick={() => setPage(p => Math.min(pagination.pages, p + 1))}
-            disabled={page === pagination.pages}
-            className="btn-secondary px-4 py-2 disabled:opacity-40"
-          >
-            Next →
-          </button>
         </div>
       )}
     </div>
