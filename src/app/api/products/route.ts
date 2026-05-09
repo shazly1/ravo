@@ -25,13 +25,20 @@ export async function GET(req: NextRequest) {
     if (featured === 'true') {
       query.featured = true;
     }
-    if (search) {
-      const sanitized = sanitizeString(search).slice(0, 100);
-      query.$or = [
-        { title: { $regex: sanitized, $options: 'i' } },
-        { description: { $regex: sanitized, $options: 'i' } },
-      ];
-    }
+   if (search) {
+  const sanitized = sanitizeString(search).slice(0, 100).trim();
+  const words = sanitized.split(/\s+/).filter(Boolean);
+  
+  if (words.length > 0) {
+    query.$and = words.map(word => ({
+      $or: [
+        { title: { $regex: word, $options: 'i' } },
+        { description: { $regex: word, $options: 'i' } },
+        { affiliateStore: { $regex: word, $options: 'i' } },
+      ]
+    }));
+  }
+}
 
     const total = await Product.countDocuments(query);
     const products = await Product.find(query)
