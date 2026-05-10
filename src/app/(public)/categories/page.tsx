@@ -1,7 +1,7 @@
 export const revalidate = 0;
 import { connectDB } from '@/lib/db';
 import Category from '@/models/Category';
-import Link from 'next/link';
+import CategoryCard from '@/components/public/CategoryCard';
 
 export default async function CategoriesPage() {
   await connectDB();
@@ -23,18 +23,7 @@ export default async function CategoriesPage() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {categories.map((cat: any) => (
-            <Link
-              key={cat._id.toString()}
-              href={`/products?category=${cat._id}`}
-              className="card p-6 text-center hover:border-brand-500/50 hover:bg-dark-700 transition-all duration-200 group"
-            >
-              <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-200">
-                {cat.icon || '🏷️'}
-              </div>
-              <h3 className="font-semibold text-white group-hover:text-brand-400 transition-colors">
-                {cat.name}
-              </h3>
-            </Link>
+            <CategoryCard key={cat._id.toString()} category={cat} />
           ))}
         </div>
       )}
