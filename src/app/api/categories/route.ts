@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const name = sanitizeString(body.name);
-    const icon = sanitizeString(body.icon || '🏷️').slice(0, 10);
+    const icon = sanitizeString(body.icon || '🏷️').slice(0, 500);
 
     if (!name) return NextResponse.json({ error: 'Name is required' }, { status: 400 });
 
