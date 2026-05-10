@@ -1,14 +1,19 @@
 'use client';
 import { useState } from 'react';
 
-export default function ProductImageGallery({ image, images }: { image: string; images?: string[] }) {
+export default function ProductImageGallery({
+  image,
+  images,
+}: {
+  image: string;
+  images?: string[];
+}) {
   const allImages = [image, ...(images || [])].filter(Boolean);
   const [selected, setSelected] = useState(0);
   const [zoomed, setZoomed] = useState(false);
 
   return (
     <div className="card overflow-hidden">
-      {/* Main Image with Zoom */}
       <div
         className="relative overflow-hidden cursor-zoom-in"
         onMouseEnter={() => setZoomed(true)}
@@ -28,7 +33,6 @@ export default function ProductImageGallery({ image, images }: { image: string; 
         )}
       </div>
 
-      {/* Thumbnail Gallery */}
       {allImages.length > 1 && (
         <div className="flex gap-2 p-3 overflow-x-auto bg-dark-700">
           {allImages.map((img, i) => (
@@ -36,10 +40,16 @@ export default function ProductImageGallery({ image, images }: { image: string; 
               key={i}
               onClick={() => setSelected(i)}
               className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                selected === i ? 'border-brand-500' : 'border-dark-500 hover:border-dark-400'
+                selected === i
+                  ? 'border-brand-500'
+                  : 'border-dark-500 hover:border-dark-400'
               }`}
             >
-              <img src={img} alt={`Image ${i + 1}`} className="w-full h-full object-cover" />
+              <img
+                src={img}
+                alt={`Image ${i + 1}`}
+                className="w-full h-full object-cover"
+              />
             </button>
           ))}
         </div>
