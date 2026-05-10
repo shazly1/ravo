@@ -20,7 +20,7 @@ export async function PUT(
     const body = await req.json();
     const updates: Record<string, unknown> = {};
     if (body.name) updates.name = sanitizeString(body.name);
-    if (body.icon) updates.icon = sanitizeString(body.icon).slice(0, 10);
+    if (body.icon) updates.icon = sanitizeString(body.icon).slice(0, 500);
 
     await connectDB();
     const category = await Category.findByIdAndUpdate(params.id, updates, { new: true });
