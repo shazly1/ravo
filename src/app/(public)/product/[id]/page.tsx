@@ -68,7 +68,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
             </span>
           </div>
 
-          
+          <a
             href={product.affiliateLink}
             target="_blank"
             rel="noopener noreferrer sponsored"
