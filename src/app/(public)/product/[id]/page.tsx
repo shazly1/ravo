@@ -21,7 +21,6 @@ const storeLabels: Record<string, string> = {
 
 export default async function ProductDetailPage({ params }: { params: { id: string } }) {
   if (!mongoose.isValidObjectId(params.id)) notFound();
-
   await connectDB();
   const product = await Product.findById(params.id).populate('category', 'name slug').lean() as any;
   if (!product) notFound();
@@ -36,10 +35,8 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
       </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        {/* Image Gallery */}
         <ProductImageGallery image={product.image} images={product.images} />
 
-        {/* Details */}
         <div className="flex flex-col gap-6">
           {product.category && (
             <Link
