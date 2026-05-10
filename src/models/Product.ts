@@ -22,6 +22,7 @@ const ProductSchema = new Schema<IProduct>(
     title: { type: String, required: true, trim: true, maxlength: 300 },
     description: { type: String, required: true, trim: true, maxlength: 5000 },
     image: { type: String, required: true, trim: true },
+    images: [{ type: String, trim: true }],
     price: { type: Number, min: 0 },
     currency: { type: String, default: 'USD', maxlength: 10 },
     category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },

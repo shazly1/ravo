@@ -16,6 +16,7 @@ export default function ProductForm({ product, isEdit }: ProductFormProps) {
     title: product?.title || '',
     description: product?.description || '',
     image: product?.image || '',
+    images: product?.images?.join('\n') || '',
     price: product?.price || '',
     currency: product?.currency || 'USD',
     category: product?.category?._id || product?.category || '',
@@ -46,7 +47,10 @@ export default function ProductForm({ product, isEdit }: ProductFormProps) {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          images: form.images.split('\n').map((s: string) => s.trim()).filter(Boolean),
+        }),
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error || 'Failed to save'); return; }
@@ -76,13 +80,25 @@ export default function ProductForm({ product, isEdit }: ProductFormProps) {
       </div>
 
       <div>
-        <label className="label">Image URL *</label>
+        <label className="label">Main Image URL *</label>
         <input name="image" value={form.image} onChange={handleChange} className="input" placeholder="https://example.com/image.jpg" required />
         {form.image && (
           <div className="mt-2 rounded-xl overflow-hidden w-32 h-24 bg-dark-700">
             <img src={form.image} alt="Preview" className="w-full h-full object-cover" />
           </div>
         )}
+      </div>
+
+      <div>
+        <label className="label">Extra Images (one URL per line)</label>
+        <textarea
+          value={form.images}
+          onChange={e => setForm(prev => ({ ...prev, images: e.target.value }))}
+          className="input min-h-[80px] resize-none"
+          placeholder={"https://example.com/image2.jpg\nhttps://example.com/image3.jpg"}
+          rows={3}
+        />
+        <p className="text-gray-500 text-xs mt-1">Add up to 5 extra images, one per line</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">

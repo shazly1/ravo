@@ -6,11 +6,10 @@ import { sanitizeString } from '@/lib/validation';
 
 function slugify(str: string): string {
   return str
-    .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/\s+/g, '-')
+    .replace(/[^\u0600-\u06FFa-zA-Z0-9-]/g, '')
+    .toLowerCase() || Date.now().toString();
 }
 
 export async function GET() {

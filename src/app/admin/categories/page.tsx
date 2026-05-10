@@ -1,13 +1,11 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-const COMMON_ICONS = ['📱', '💻', '👗', '👟', '🏠', '🍕', '💄', '📚', '🎮', '🚗', '⌚', '🏋️', '🎵', '📷', '🧴', '🛋️', '🌿', '✈️', '🐾', '🎁'];
-
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
-  const [icon, setIcon] = useState('🏷️');
+  const [image, setImage] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -30,11 +28,11 @@ export default function AdminCategoriesPage() {
     const res = await fetch('/api/categories', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name.trim(), icon }),
+      body: JSON.stringify({ name: name.trim(), icon: image || '🏷️', image }),
     });
     const data = await res.json();
     if (!res.ok) { setError(data.error || 'Failed to add'); }
-    else { setName(''); setIcon('🏷️'); await fetchCategories(); }
+    else { setName(''); setImage(''); await fetchCategories(); }
     setSaving(false);
   };
 
@@ -53,34 +51,43 @@ export default function AdminCategoriesPage() {
         <p className="text-gray-400 mt-1">Manage product categories</p>
       </div>
 
-      {/* Add Category Form */}
       <div className="card p-6 mb-8 max-w-xl">
         <h2 className="font-semibold text-white mb-4">Add New Category</h2>
         <form onSubmit={handleAdd} className="space-y-4">
           {error && <div className="bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl px-4 py-3 text-sm">{error}</div>}
+          
           <div>
-            <label className="label">Icon</label>
-            <div className="flex flex-wrap gap-2 mb-2">
-              {COMMON_ICONS.map(i => (
-                <button key={i} type="button" onClick={() => setIcon(i)}
-                  className={`w-9 h-9 rounded-lg text-lg transition-all ${icon === i ? 'bg-brand-500/20 border border-brand-500/40 scale-110' : 'bg-dark-700 hover:bg-dark-600'}`}>
-                  {i}
-                </button>
-              ))}
-            </div>
-            <input value={icon} onChange={e => setIcon(e.target.value)} className="input w-24 text-center" maxLength={4} />
+            <label className="label">Category Name * (English or Arabic)</label>
+            <input 
+              value={name} 
+              onChange={e => setName(e.target.value)} 
+              className="input" 
+              placeholder="e.g. Electronics / إلكترونيات" 
+              required 
+            />
           </div>
+
           <div>
-            <label className="label">Category Name *</label>
-            <input value={name} onChange={e => setName(e.target.value)} className="input" placeholder="e.g. Electronics" required />
+            <label className="label">Category Image URL</label>
+            <input
+              value={image}
+              onChange={e => setImage(e.target.value)}
+              className="input"
+              placeholder="https://example.com/image.jpg"
+            />
+            {image && (
+              <div className="mt-2 w-20 h-20 rounded-xl overflow-hidden bg-dark-700">
+                <img src={image} alt="preview" className="w-full h-full object-cover" />
+              </div>
+            )}
           </div>
+
           <button type="submit" disabled={saving} className="btn-primary disabled:opacity-60">
             {saving ? 'Adding...' : '+ Add Category'}
           </button>
         </form>
       </div>
 
-      {/* Categories List */}
       <div className="card overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-gray-400">Loading...</div>
@@ -91,7 +98,11 @@ export default function AdminCategoriesPage() {
             {categories.map((cat: any) => (
               <div key={cat._id} className="flex items-center justify-between p-4 hover:bg-dark-700/30 transition-colors">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">{cat.icon}</span>
+                  {cat.icon && cat.icon.startsWith('http') ? (
+                    <img src={cat.icon} alt={cat.name} className="w-10 h-10 rounded-lg object-cover" />
+                  ) : (
+                    <span className="text-2xl">{cat.icon || '🏷️'}</span>
+                  )}
                   <span className="text-white font-medium">{cat.name}</span>
                 </div>
                 <button

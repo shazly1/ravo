@@ -15,7 +15,7 @@ export default function ProductCard({ product }: { product: any }) {
         <img
           src={product.image}
           alt={product.title}
-          className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300"
+         className="w-full h-44 object-contain mix-blend-multiply bg-white group-hover:scale-105 transition-transform duration-300"
         />
         {product.affiliateStore && (
           <span className={`absolute top-2 right-2 badge border ${storeBadgeColors[product.affiliateStore] || storeBadgeColors.other} capitalize`}>
