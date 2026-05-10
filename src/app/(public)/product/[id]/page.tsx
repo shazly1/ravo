@@ -82,6 +82,7 @@ export default async function ProductDetailPage({
           </div>
 
           
+         <a 
             href={product.affiliateLink}
             target="_blank"
             rel="noopener noreferrer sponsored"
