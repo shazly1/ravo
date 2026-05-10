@@ -1,3 +1,4 @@
+import ProductImageGallery from '@/components/public/ProductImageGallery';
 import { connectDB } from '@/lib/db';
 import Product from '@/models/Product';
 import Link from 'next/link';
@@ -35,19 +36,11 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
       </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        {/* Image */}
-        <div className="card overflow-hidden">
-          <img
-            src={product.image}
-            alt={product.title}
-            className="w-full h-80 md:h-96 object-cover"
-            
-          />
-        </div>
+        {/* Image Gallery */}
+        <ProductImageGallery image={product.image} images={product.images} />
 
         {/* Details */}
         <div className="flex flex-col gap-6">
-          {/* Category badge */}
           {product.category && (
             <Link
               href={`/products?category=${product.category._id}`}
@@ -61,7 +54,6 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
             {product.title}
           </h1>
 
-          {/* Price */}
           {product.price && (
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-bold text-brand-400">
@@ -72,7 +64,6 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
           <p className="text-gray-400 leading-relaxed">{product.description}</p>
 
-          {/* Store badge */}
           <div className="flex items-center gap-2">
             <span className="text-gray-500 text-sm">Available on:</span>
             <span className="badge bg-dark-600 text-gray-300 capitalize px-3 py-1">
@@ -80,8 +71,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
             </span>
           </div>
 
-          {/* Buy Now Button */}
-          <a
+          
             href={product.affiliateLink}
             target="_blank"
             rel="noopener noreferrer sponsored"
