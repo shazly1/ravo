@@ -1,9 +1,10 @@
-import ProductImageGallery from '@/components/public/ProductImageGallery';
+// v3
 import { connectDB } from '@/lib/db';
 import Product from '@/models/Product';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import mongoose from 'mongoose';
+import ProductImageGallery from '@/components/public/ProductImageGallery';
 
 const storeColors: Record<string, string> = {
   amazon: 'bg-yellow-500 hover:bg-yellow-400',
@@ -19,15 +20,27 @@ const storeLabels: Record<string, string> = {
   other: '🛒 Buy Now',
 };
 
-export default async function ProductDetailPage({ params }: { params: { id: string } }) {
+export default async function ProductDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   if (!mongoose.isValidObjectId(params.id)) notFound();
   await connectDB();
-  const product = await Product.findById(params.id).populate('category', 'name slug').lean() as any;
+  const product = await Product.findById(params.id)
+    .populate('category', 'name slug')
+    .lean() as any;
   if (!product) notFound();
+
+  const buyColor = storeColors[product.affiliateStore] || storeColors.other;
+  const buyLabel = storeLabels[product.affiliateStore] || storeLabels.other;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <Link href="/products" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
+      <Link
+        href="/products"
+        className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors"
+      >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
@@ -68,13 +81,13 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
             </span>
           </div>
 
-          <a
+          
             href={product.affiliateLink}
             target="_blank"
             rel="noopener noreferrer sponsored"
-            className={`btn-primary text-center text-lg py-4 ${storeColors[product.affiliateStore] || storeColors.other}`}
+            className={`btn-primary text-center text-lg py-4 ${buyColor}`}
           >
-            {storeLabels[product.affiliateStore] || storeLabels.other}
+            {buyLabel}
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
