@@ -6,27 +6,40 @@ import { getServerUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 
+// الضربة القاضية: دي بتخلي الداشبورد ميعملش كاش للأرقام ويجيبها دايماً طازة من الداتابيز
+export const revalidate = 0; 
+
 export default async function AdminDashboard() {
   const user = await getServerUser();
   if (!user) redirect('/admin/login');
+
   await connectDB();
+
+  // جلب البيانات - countDocuments() هنا هتجيب الرقم الحقيقي مهما كان كبير
   const [totalProducts, totalCategories, totalAdmins, recentProducts] = await Promise.all([
     Product.countDocuments(),
     Category.countDocuments(),
     User.countDocuments({ role: 'admin' }),
-    Product.find().populate('category', 'name').sort({ createdAt: -1 }).limit(5).lean(),
+    Product.find()
+      .populate('category', 'name')
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .lean(),
   ]);
+
   const stats = [
     { label: 'Total Products', value: totalProducts, icon: '🛍️', href: '/admin/products' },
     { label: 'Categories', value: totalCategories, icon: '📂', href: '/admin/categories' },
     ...(user?.role === 'super_admin' ? [{ label: 'Admins', value: totalAdmins, icon: '👥', href: '/admin/admins' }] : []),
   ];
+
   return (
     <div>
       <div className="mb-8">
         <h1 className="font-display text-2xl font-bold text-white">Welcome back, {user?.name} 👋</h1>
         <p className="text-gray-400 mt-1">Here's what's happening on your platform</p>
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
         {stats.map((stat) => (
           <Link key={stat.label} href={stat.href} className="card p-6 hover:border-brand-500/30 transition-all group">
@@ -39,6 +52,8 @@ export default async function AdminDashboard() {
           </Link>
         ))}
       </div>
+
+      {/* باقي الكود كما هو (Quick Actions & Recent Products Table) */}
       <div className="mb-10">
         <h2 className="font-display text-lg font-bold text-white mb-4">Quick Actions</h2>
         <div className="flex flex-wrap gap-3">
@@ -49,6 +64,7 @@ export default async function AdminDashboard() {
           )}
         </div>
       </div>
+
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-display text-lg font-bold text-white">Recent Products</h2>

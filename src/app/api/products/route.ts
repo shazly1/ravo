@@ -12,7 +12,9 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url);
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
-    const limit = Math.min(24, Math.max(1, parseInt(searchParams.get('limit') || '24')));
+    // التعديل الذكي: لو طلبنا limit=all يفتح الحد، غير كدة يلتزم بـ 24 للموقع الأساسي
+    const limitParam = searchParams.get('limit');
+    const limit = limitParam === 'all' ? 10000 : Math.min(24, Math.max(1, parseInt(limitParam || '24')));
     const category = searchParams.get('category');
     const search = searchParams.get('search');
     const featured = searchParams.get('featured');
