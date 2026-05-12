@@ -33,17 +33,30 @@ export default async function HomePage() {
             Discover Amazing
             <span className="text-brand-500"> Products</span>
           </h1>
-          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10">
+          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8">
             Find the best deals from Amazon, Noon, Jumia and more.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/products" className="btn-primary text-lg px-8 py-4">
-              Browse Products
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-            <Link href="/categories" className="btn-secondary text-lg px-8 py-4">View Categories</Link>
+
+          {/* Search Bar */}
+          <div className="flex flex-col gap-4 items-center max-w-xl mx-auto w-full mb-4">
+            <form action="/products" method="get" className="flex gap-3 w-full">
+              <input
+                type="text"
+                name="search"
+                placeholder="Search for products..."
+                className="input flex-1 text-base"
+              />
+              <button type="submit" className="btn-primary px-6">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                Search
+              </button>
+            </form>
+            <div className="flex gap-4">
+              <Link href="/products" className="btn-secondary">Browse All</Link>
+              <Link href="/categories" className="btn-secondary">Categories</Link>
+            </div>
           </div>
         </div>
       </section>
@@ -70,7 +83,7 @@ export default async function HomePage() {
             <div className="text-4xl mb-3">📢</div>
             <h3 className="text-xl font-bold text-white mb-2">مساحة مخصصة للإعلانات</h3>
             <p className="text-gray-400 mb-4">برجاء التواصل للمزيد من المعلومات</p>
-            <a
+            
               href="https://wa.me/201022032837"
               target="_blank"
               rel="noopener noreferrer"

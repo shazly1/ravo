@@ -1,10 +1,10 @@
-// v3
 import { connectDB } from '@/lib/db';
 import Product from '@/models/Product';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import mongoose from 'mongoose';
 import ProductImageGallery from '@/components/public/ProductImageGallery';
+import type { Metadata } from 'next';
 
 const storeColors: Record<string, string> = {
   amazon: 'bg-yellow-500 hover:bg-yellow-400',
@@ -20,11 +20,23 @@ const storeLabels: Record<string, string> = {
   other: '🛒 Buy Now',
 };
 
-export default async function ProductDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  if (!mongoose.isValidObjectId(params.id)) return {};
+  await connectDB();
+  const product = await Product.findById(params.id).lean() as any;
+  if (!product) return {};
+  return {
+    title: `${product.title} – RAVO`,
+    description: product.description?.slice(0, 160),
+    openGraph: {
+      title: `${product.title} – RAVO`,
+      description: product.description?.slice(0, 160),
+      images: [{ url: product.image }],
+    },
+  };
+}
+
+export default async function ProductDetailPage({ params }: { params: { id: string } }) {
   if (!mongoose.isValidObjectId(params.id)) notFound();
   await connectDB();
   const product = await Product.findById(params.id)
@@ -82,7 +94,6 @@ export default async function ProductDetailPage({
           </div>
 
           
-         <a 
             href={product.affiliateLink}
             target="_blank"
             rel="noopener noreferrer sponsored"

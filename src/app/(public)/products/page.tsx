@@ -18,10 +18,12 @@ function ProductsContent() {
     fetch('/api/categories').then(r => r.json()).then(d => setCategories(d.categories || []));
   }, []);
 
-  useEffect(() => {
-    const cat = searchParams.get('category');
-    if (cat) setSelectedCategory(cat);
-  }, [searchParams]);
+ useEffect(() => {
+  const cat = searchParams.get('category');
+  const s = searchParams.get('search');
+  if (cat) setSelectedCategory(cat);
+  if (s) { setSearch(s); setSearchInput(s); }
+}, [searchParams]);
 
   useEffect(() => {
     const fetchProducts = async () => {
