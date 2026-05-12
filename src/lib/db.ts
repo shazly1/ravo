@@ -22,17 +22,29 @@ export async function connectDB() {
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
+    const opts = {
       bufferCommands: false,
+      // تحسين أداء الاتصال
+      maxPoolSize: 10, 
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    };
+
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      // بنسجل الموديلات مرة واحدة فقط أول ما الـ Promise ينجح
+      require('@/models/User');
+      require('@/models/Product');
+      require('@/models/Category');
+      return mongoose;
     });
   }
 
-  cached.conn = await cached.promise;
-
-  // Register all models to prevent MissingSchemaError on Vercel
-  await import('@/models/User');
-  await import('@/models/Product');
-  await import('@/models/Category');
+  try {
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
+  }
 
   return cached.conn;
 }
