@@ -5,7 +5,7 @@ import User from '@/models/User';
 import { getServerUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-
+export const dynamic = 'force-dynamic';
 // الضربة القاضية: دي بتخلي الداشبورد ميعملش كاش للأرقام ويجيبها دايماً طازة من الداتابيز
 export const revalidate = 0; 
 
