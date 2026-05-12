@@ -7,109 +7,118 @@ import ProductImageGallery from '@/components/public/ProductImageGallery';
 import type { Metadata } from 'next';
 
 const storeColors: Record<string, string> = {
-  amazon: 'bg-yellow-500 hover:bg-yellow-400',
-  noon: 'bg-yellow-400 hover:bg-yellow-300',
-  jumia: 'bg-orange-500 hover:bg-orange-400',
-  other: 'bg-brand-500 hover:bg-brand-400',
+  amazon: 'bg-yellow-500 hover:bg-yellow-400',
+  noon: 'bg-yellow-400 hover:bg-yellow-300',
+  jumia: 'bg-orange-500 hover:bg-orange-400',
+  other: 'bg-brand-500 hover:bg-brand-400',
 };
 
 const storeLabels: Record<string, string> = {
-  amazon: '🛒 Buy on Amazon',
-  noon: '🛒 Buy on Noon',
-  jumia: '🛒 Buy on Jumia',
-  other: '🛒 Buy Now',
+  amazon: '🛒 Buy on Amazon',
+  noon: '🛒 Buy on Noon',
+  jumia: '🛒 Buy on Jumia',
+  other: '🛒 Buy Now',
 };
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  if (!mongoose.isValidObjectId(params.id)) return {};
-  await connectDB();
-  const product = await Product.findById(params.id).lean() as any;
-  if (!product) return {};
-  return {
-    title: `${product.title} – RAVO`,
-    description: product.description?.slice(0, 160),
-    openGraph: {
-      title: `${product.title} – RAVO`,
-      description: product.description?.slice(0, 160),
-      images: [{ url: product.image }],
-    },
-  };
+  if (!mongoose.isValidObjectId(params.id)) return {};
+  await connectDB();
+  const product = await Product.findById(params.id).lean() as any;
+  if (!product) return {};
+  return {
+    title: `${product.title} – RAVO`,
+    description: product.description?.slice(0, 160),
+    openGraph: {
+      title: `${product.title} – RAVO`,
+      description: product.description?.slice(0, 160),
+      images: [{ url: product.image }],
+    },
+  };
 }
 
 export default async function ProductDetailPage({ params }: { params: { id: string } }) {
-  if (!mongoose.isValidObjectId(params.id)) notFound();
-  await connectDB();
-  const product = await Product.findById(params.id)
-    .populate('category', 'name slug')
-    .lean() as any;
-  if (!product) notFound();
+  if (!mongoose.isValidObjectId(params.id)) notFound();
+  await connectDB();
+  const product = await Product.findById(params.id)
+    .populate('category', 'name slug')
+    .lean() as any;
+  if (!product) notFound();
 
-  const buyColor = storeColors[product.affiliateStore] || storeColors.other;
-  const buyLabel = storeLabels[product.affiliateStore] || storeLabels.other;
+  const buyColor = storeColors[product.affiliateStore] || storeColors.other;
+  const buyLabel = storeLabels[product.affiliateStore] || storeLabels.other;
 
-  return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <Link
-        href="/products"
-        className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors"
-      >
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-        Back to Products
-      </Link>
+  return (
+    // أضفنا text-left لضمان عدم سنترة النصوص، و min-h-screen مع pt-24 لضمان بعد المحتوى عن الـ Navbar
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pt-24 text-left min-h-screen">
+      <Link
+        href="/products"
+        className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors"
+      >
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+        Back to Products
+      </Link>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        <ProductImageGallery image={product.image} images={product.images} />
+      {/* استخدمنا items-start لمنع تمدد العناصر طولياً وتوسيطها */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+        
+        {/* قسم الصور */}
+        <div className="w-full">
+          <ProductImageGallery image={product.image} images={product.images} />
+        </div>
 
-        <div className="flex flex-col gap-6">
-          {product.category && (
-            <Link
-              href={`/products?category=${product.category._id}`}
-              className="inline-flex items-center w-fit gap-1.5 bg-brand-500/10 text-brand-400 border border-brand-500/20 rounded-full px-3 py-1 text-sm font-medium hover:bg-brand-500/20 transition-colors"
-            >
-              {product.category.name}
-            </Link>
-          )}
+        {/* قسم التفاصيل */}
+        <div className="flex flex-col gap-6">
+          {product.category && (
+            <Link
+              href={`/products?category=${product.category._id}`}
+              className="inline-flex items-center w-fit gap-1.5 bg-brand-500/10 text-brand-400 border border-brand-500/20 rounded-full px-3 py-1 text-sm font-medium hover:bg-brand-500/20 transition-colors"
+            >
+              {product.category.name}
+            </Link>
+          )}
 
-          <h1 className="font-display text-2xl md:text-3xl font-bold text-white leading-tight">
-            {product.title}
-          </h1>
+          <h1 className="font-display text-3xl md:text-4xl font-bold text-white leading-tight">
+            {product.title}
+          </h1>
 
-          {product.price && (
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-brand-400">
-                {product.price} {product.currency || 'USD'}
-              </span>
-            </div>
-          )}
+          {product.price && (
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-bold text-brand-400">
+                {product.price} {product.currency || 'USD'}
+              </span>
+            </div>
+          )}
 
-          <p className="text-gray-400 leading-relaxed">{product.description}</p>
+          <p className="text-gray-400 leading-relaxed text-lg whitespace-pre-line">
+            {product.description}
+          </p>
 
-          <div className="flex items-center gap-2">
-            <span className="text-gray-500 text-sm">Available on:</span>
-            <span className="badge bg-dark-600 text-gray-300 capitalize px-3 py-1">
-              {product.affiliateStore}
-            </span>
-          </div>
+          <div className="flex items-center gap-3 py-2">
+            <span className="text-gray-500 text-sm">Available on:</span>
+            <span className="bg-zinc-800 text-gray-300 capitalize px-4 py-1 rounded-md border border-zinc-700">
+              {product.affiliateStore}
+            </span>
+          </div>
 
-          <a
-            href={product.affiliateLink}
-            target="_blank"
-            rel="noopener noreferrer sponsored"
-            className={`btn-primary text-center text-lg py-4 ${buyColor}`}
-          >
-            {buyLabel}
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-          </a>
+          <a
+            href={product.affiliateLink}
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+            className={`flex items-center justify-center gap-3 rounded-xl font-bold text-black text-center text-lg py-4 transition-all transform hover:scale-[1.02] active:scale-[0.98] ${buyColor}`}
+          >
+            {buyLabel}
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
 
-          <p className="text-gray-600 text-xs">
-            * You will be redirected to the external store. RAVO is not responsible for external store content.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+          <p className="text-gray-500 text-xs italic">
+            * You will be redirected to {product.affiliateStore}. RAVO is not responsible for external store content.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 }
