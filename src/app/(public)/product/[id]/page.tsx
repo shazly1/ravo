@@ -6,6 +6,9 @@ import mongoose from 'mongoose';
 import ProductImageGallery from '@/components/public/ProductImageGallery';
 import type { Metadata } from 'next';
 
+// 1. تفعيل الكاش لمدة ساعة لضمان سرعة خرافية لأي مستخدم جديد
+export const revalidate = 3600; 
+
 const storeColors: Record<string, string> = {
   amazon: 'bg-yellow-500 hover:bg-yellow-400',
   noon: 'bg-yellow-400 hover:bg-yellow-300',
@@ -23,7 +26,8 @@ const storeLabels: Record<string, string> = {
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   if (!mongoose.isValidObjectId(params.id)) return {};
   await connectDB();
-  const product = await Product.findById(params.id).lean() as any;
+  // تحسين: جلب الحقول المطلوبة للميتادات فقط
+  const product = await Product.findById(params.id).select('title description image').lean() as any;
   if (!product) return {};
   return {
     title: `${product.title} – RAVO`,
@@ -39,16 +43,19 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 export default async function ProductDetailPage({ params }: { params: { id: string } }) {
   if (!mongoose.isValidObjectId(params.id)) notFound();
   await connectDB();
+
+  // 2. تحسين: استخدام .select() لجلب البيانات الضرورية فقط وتقليل وقت الـ Query
   const product = await Product.findById(params.id)
+    .select('title description image images price currency affiliateLink affiliateStore category')
     .populate('category', 'name slug')
     .lean() as any;
+
   if (!product) notFound();
 
   const buyColor = storeColors[product.affiliateStore] || storeColors.other;
   const buyLabel = storeLabels[product.affiliateStore] || storeLabels.other;
 
   return (
-    // أضفنا text-left لضمان عدم سنترة النصوص، و min-h-screen مع pt-24 لضمان بعد المحتوى عن الـ Navbar
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pt-24 text-left min-h-screen">
       <Link
         href="/products"
@@ -60,15 +67,11 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
         Back to Products
       </Link>
 
-      {/* استخدمنا items-start لمنع تمدد العناصر طولياً وتوسيطها */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-        
-        {/* قسم الصور */}
         <div className="w-full">
           <ProductImageGallery image={product.image} images={product.images} />
         </div>
 
-        {/* قسم التفاصيل */}
         <div className="flex flex-col gap-6">
           {product.category && (
             <Link
@@ -82,7 +85,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
           <h1 className="font-display text-3xl md:text-4xl font-bold text-white leading-tight">
             {product.title}
           </h1>
-
+git add src/app/(public)/product/[id]/page.tsx
           {product.price && (
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-bold text-brand-400">
