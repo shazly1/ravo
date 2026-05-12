@@ -17,7 +17,6 @@ async function getData() {
 
 export default async function HomePage() {
   const { featuredProducts, categories } = await getData();
-
   return (
     <div>
       {/* Hero */}
@@ -83,7 +82,7 @@ export default async function HomePage() {
             <div className="text-4xl mb-3">📢</div>
             <h3 className="text-xl font-bold text-white mb-2">مساحة مخصصة للإعلانات</h3>
             <p className="text-gray-400 mb-4">برجاء التواصل للمزيد من المعلومات</p>
-            
+            <a
               href="https://wa.me/201022032837"
               target="_blank"
               rel="noopener noreferrer"
