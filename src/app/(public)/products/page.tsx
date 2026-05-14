@@ -9,40 +9,41 @@ function ProductsContent() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
-  const [search, setSearch] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetch('/api/categories').then(r => r.json()).then(d => setCategories(d.categories || []));
   }, []);
 
- useEffect(() => {
-  const cat = searchParams.get('category');
-  const s = searchParams.get('search');
-  if (cat) setSelectedCategory(cat);
-  if (s) { setSearch(s); setSearchInput(s); }
-}, [searchParams]);
+  useEffect(() => {
+    const cat = searchParams.get('category');
+    const s = searchParams.get('search');
+    if (cat) setSelectedCategory(cat);
+    if (s) setSearchInput(s);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
-      const params = new URLSearchParams({ page: String(page), limit: '99999' });
+      const params = new URLSearchParams({ page: String(page), limit: '24' });
       if (selectedCategory !== 'all') params.set('category', selectedCategory);
-      if (search) params.set('search', search);
+      const currentSearch = searchInput || searchParams.get('search') || '';
+      if (currentSearch) params.set('search', currentSearch);
       const res = await fetch(`/api/products?${params}`);
       const data = await res.json();
       setProducts(data.products || []);
+      setTotalPages(data.pagination?.pages || 1);
       setLoading(false);
     };
     fetchProducts();
-  }, [page, selectedCategory, search]);
+  }, [page, selectedCategory, searchInput, searchParams]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setPage(1);
-    setSearch(searchInput);
   };
 
   const handleCategoryChange = (cat: string) => {
@@ -99,11 +100,35 @@ function ProductsContent() {
           <p className="text-gray-400">Try a different search or category</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-          {products.map((product: any) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+            {products.map((product: any) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-4 mt-10">
+              <button
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="btn-secondary disabled:opacity-40"
+              >
+                ← Previous
+              </button>
+              <span className="text-gray-400 text-sm">
+                Page {page} of {totalPages}
+              </span>
+              <button
+                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+                className="btn-secondary disabled:opacity-40"
+              >
+                Next →
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

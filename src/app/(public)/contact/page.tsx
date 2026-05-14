@@ -21,7 +21,7 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
           <a
-            href="https://wa.me/201022032837"
+            href="https://whatsapp.com/channel/0029VbDGUstJZg4GfkvZlY1f"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-4 card p-4 hover:border-green-500/50 hover:bg-green-500/5 transition-all group"
@@ -31,7 +31,7 @@ export default function ContactPage() {
             </div>
             <div>
               <div className="font-semibold text-white group-hover:text-green-400 transition-colors">WhatsApp</div>
-              <div className="text-gray-500 text-sm">Join our community</div>
+              <div className="text-gray-500 text-sm">Join our channel</div>
             </div>
           </a>
 

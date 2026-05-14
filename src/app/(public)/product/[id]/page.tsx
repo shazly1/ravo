@@ -85,7 +85,6 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
           <h1 className="font-display text-3xl md:text-4xl font-bold text-white leading-tight">
             {product.title}
           </h1>
-git add src/app/(public)/product/[id]/page.tsx
           {product.price && (
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-bold text-brand-400">
