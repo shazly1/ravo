@@ -11,11 +11,16 @@ const storeBadgeColors: Record<string, string> = {
 export default function ProductCard({ product }: { product: any }) {
   return (
     <Link href={`/product/${product._id}`} className="card group flex flex-col hover:shadow-xl hover:shadow-black/20 hover:-translate-y-1 transition-all duration-200">
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden bg-gray-100">
         <img
           src={product.image}
           alt={product.title}
-        className="w-full h-44 object-contain bg-gray-100 group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
+          decoding="async"
+          className="w-full h-44 object-contain group-hover:scale-105 transition-transform duration-300"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = '/ravo-icon.jpeg';
+          }}
         />
         {product.affiliateStore && (
           <span className={`absolute top-2 right-2 badge border ${storeBadgeColors[product.affiliateStore] || storeBadgeColors.other} capitalize`}>
