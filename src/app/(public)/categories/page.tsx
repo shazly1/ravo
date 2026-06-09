@@ -1,7 +1,25 @@
-export const revalidate = 0;
+export const revalidate = 60;
+import type { Metadata } from 'next';
 import { connectDB } from '@/lib/db';
 import Category from '@/models/Category';
 import CategoryCard from '@/components/public/CategoryCard';
+
+export const metadata: Metadata = {
+  title: 'Categories – RAVO',
+  description: 'Browse all product categories on RAVO. Find deals in electronics, fashion, gym, skincare and more from Amazon, Noon and Jumia.',
+  keywords: 'product categories egypt, electronics deals, fashion deals, gym equipment egypt, skincare egypt',
+  openGraph: {
+    title: 'Categories – RAVO',
+    description: 'Browse all product categories on RAVO.',
+    url: 'https://ravo-self.vercel.app/categories',
+    siteName: 'RAVO',
+    type: 'website',
+    images: [{ url: 'https://ravo-self.vercel.app/ravo-icon.jpeg' }],
+  },
+  alternates: {
+    canonical: 'https://ravo-self.vercel.app/categories',
+  },
+};
 
 export default async function CategoriesPage() {
   await connectDB();

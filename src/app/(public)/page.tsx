@@ -1,10 +1,34 @@
 export const revalidate = 60;
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { connectDB } from '@/lib/db';
 import Product from '@/models/Product';
 import Category from '@/models/Category';
 import ProductCard from '@/components/public/ProductCard';
 import CategoryCard from '@/components/public/CategoryCard';
+
+export const metadata: Metadata = {
+  title: 'RAVO – Best Deals from Amazon, Noon & Jumia',
+  description: 'Discover the best product deals from Amazon, Noon, Jumia and more. RAVO helps you find top offers in Egypt all in one place.',
+  keywords: 'best deals egypt, amazon egypt, noon deals, jumia offers, online shopping egypt, affiliate products',
+  openGraph: {
+    title: 'RAVO – Best Deals from Amazon, Noon & Jumia',
+    description: 'Discover the best product deals from Amazon, Noon, Jumia and more.',
+    url: 'https://ravo-self.vercel.app',
+    siteName: 'RAVO',
+    type: 'website',
+    images: [{ url: 'https://ravo-self.vercel.app/ravo-icon.jpeg' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'RAVO – Best Deals from Amazon, Noon & Jumia',
+    description: 'Discover the best product deals from Amazon, Noon, Jumia and more.',
+    images: ['https://ravo-self.vercel.app/ravo-icon.jpeg'],
+  },
+  alternates: {
+    canonical: 'https://ravo-self.vercel.app',
+  },
+};
 
 async function getData() {
   await connectDB();
@@ -35,8 +59,6 @@ export default async function HomePage() {
           <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8">
             Find the best deals from Amazon, Noon, Jumia and more.
           </p>
-
-          {/* Search Bar */}
           <div className="flex flex-col gap-4 items-center max-w-xl mx-auto w-full mb-4">
             <form action="/products" method="get" className="flex gap-3 w-full">
               <input
@@ -82,13 +104,13 @@ export default async function HomePage() {
             <div className="text-4xl mb-3">📢</div>
             <h3 className="text-xl font-bold text-white mb-2">مساحة مخصصة للإعلانات</h3>
             <p className="text-gray-400 mb-4">برجاء التواصل للمزيد من المعلومات</p>
-            <a
-              href="https://wa.me/201022032837"
+            
+              href="https://whatsapp.com/channel/0029VbDGUstJZg4GfkvZlY1f"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
             >
-              تواصل معنا على واتساب: 01022032837
+              انضم لقناتنا على واتساب
             </a>
           </div>
         </div>

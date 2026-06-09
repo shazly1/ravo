@@ -17,8 +17,12 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'RAVO – Find the Best Deals',
+  title: {
+  default: 'RAVO – Find the Best Deals',
+  template: '%s | RAVO',
+},
   description: 'Discover top products from Amazon, Noon, Jumia and more.',
+  keywords: 'ravo, رافو, افضل عروض, تسوق اون لاين مصر, امازون, نون, جوميا, best deals egypt, online shopping',
   icons: {
     icon: '/ravo-icon.jpeg',
     apple: '/ravo-icon.jpeg',

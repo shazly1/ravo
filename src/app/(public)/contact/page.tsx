@@ -1,4 +1,21 @@
-'use client';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Contact Us – RAVO',
+  description: 'Get in touch with RAVO. Follow us on WhatsApp, Instagram, TikTok and Facebook for the latest deals and offers.',
+  openGraph: {
+    title: 'Contact Us – RAVO',
+    description: 'Get in touch with RAVO. Follow us on social media for the latest deals.',
+    url: 'https://ravo-self.vercel.app/contact',
+    siteName: 'RAVO',
+    type: 'website',
+    images: [{ url: 'https://ravo-self.vercel.app/ravo-icon.jpeg' }],
+  },
+  alternates: {
+    canonical: 'https://ravo-self.vercel.app/contact',
+  },
+};
+
 export default function ContactPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -19,8 +36,7 @@ export default function ContactPage() {
       <div className="mb-10">
         <h2 className="font-display text-xl font-bold text-white mb-6">Follow Us</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-          <a
+          
             href="https://whatsapp.com/channel/0029VbDGUstJZg4GfkvZlY1f"
             target="_blank"
             rel="noopener noreferrer"
@@ -35,7 +51,7 @@ export default function ContactPage() {
             </div>
           </a>
 
-          <a
+          
             href="https://www.instagram.com/ravo_affiliate"
             target="_blank"
             rel="noopener noreferrer"
@@ -50,12 +66,12 @@ export default function ContactPage() {
             </div>
           </a>
 
-          <a
+          
             href="https://www.tiktok.com/@ravoaffiliate"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-4 card p-4 hover:border-white/20 hover:bg-white/5 transition-all group"
-          >
+          
             <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-2xl group-hover:bg-white/10 transition-colors">
               🎵
             </div>
@@ -65,7 +81,7 @@ export default function ContactPage() {
             </div>
           </a>
 
-          <a
+          
             href="https://www.facebook.com/groups/961520243275695"
             target="_blank"
             rel="noopener noreferrer"
@@ -79,7 +95,6 @@ export default function ContactPage() {
               <div className="text-gray-500 text-sm">Join our group</div>
             </div>
           </a>
-
         </div>
       </div>
     </div>
