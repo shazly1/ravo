@@ -36,6 +36,7 @@ export default function ContactPage() {
       <div className="mb-10">
         <h2 className="font-display text-xl font-bold text-white mb-6">Follow Us</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
           
             href="https://whatsapp.com/channel/0029VbDGUstJZg4GfkvZlY1f"
             target="_blank"
@@ -71,7 +72,7 @@ export default function ContactPage() {
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-4 card p-4 hover:border-white/20 hover:bg-white/5 transition-all group"
-          
+          >
             <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-2xl group-hover:bg-white/10 transition-colors">
               🎵
             </div>
@@ -95,6 +96,7 @@ export default function ContactPage() {
               <div className="text-gray-500 text-sm">Join our group</div>
             </div>
           </a>
+
         </div>
       </div>
     </div>
