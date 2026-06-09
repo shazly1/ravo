@@ -43,7 +43,6 @@ export default async function HomePage() {
   const { featuredProducts, categories } = await getData();
   return (
     <div>
-      {/* Hero */}
       <section className="relative overflow-hidden bg-dark-900 py-20 md:py-32">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-500/10 via-transparent to-transparent" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-brand-500/5 rounded-full blur-3xl" />
@@ -61,12 +60,7 @@ export default async function HomePage() {
           </p>
           <div className="flex flex-col gap-4 items-center max-w-xl mx-auto w-full mb-4">
             <form action="/products" method="get" className="flex gap-3 w-full">
-              <input
-                type="text"
-                name="search"
-                placeholder="Search for products..."
-                className="input flex-1 text-base"
-              />
+              <input type="text" name="search" placeholder="Search for products..." className="input flex-1 text-base" />
               <button type="submit" className="btn-primary px-6">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -82,7 +76,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Store Badges */}
       <section className="border-y border-dark-700 bg-dark-800/50 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
@@ -97,26 +90,19 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Advertisement Section */}
       <section className="py-8 bg-dark-800/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="border-2 border-dashed border-brand-500/30 rounded-2xl p-8 text-center bg-brand-500/5">
             <div className="text-4xl mb-3">📢</div>
             <h3 className="text-xl font-bold text-white mb-2">مساحة مخصصة للإعلانات</h3>
             <p className="text-gray-400 mb-4">برجاء التواصل للمزيد من المعلومات</p>
-            
-              href="https://whatsapp.com/channel/0029VbDGUstJZg4GfkvZlY1f"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
-            >
+            <a href="https://whatsapp.com/channel/0029VbDGUstJZg4GfkvZlY1f" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-6 py-3 rounded-xl transition-colors">
               انضم لقناتنا على واتساب
             </a>
           </div>
         </div>
       </section>
 
-      {/* Featured Categories */}
       {categories.length > 0 && (
         <section className="py-16 md:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-10">
@@ -134,7 +120,6 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Featured Products */}
       {featuredProducts.length > 0 && (
         <section className="py-16 md:py-20 bg-dark-800/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -163,7 +148,6 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* CTA */}
       <section className="py-20 bg-gradient-to-r from-brand-600 to-brand-500">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">Ready to find your next deal?</h2>
